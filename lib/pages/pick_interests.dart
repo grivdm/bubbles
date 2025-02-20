@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 
-import 'package:bubbles/models.dart/picked_interest.dart';
+import 'package:bubbles/models/picked_interest.dart';
 import 'package:bubbles/widgets/interest_bubbles.dart';
 
 class PickInterests extends StatefulWidget {
@@ -59,7 +59,7 @@ class _PickInterestsState extends State<PickInterests> {
                 color: Colors.green,
                 alignment: Alignment.center,
                 child: interestsJson == null
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : GameWidget(
                         game: game,
                       ),

@@ -2,10 +2,10 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bubbles/enums.dart';
-import 'package:bubbles/game/Interest_bubble.dart';
+import 'package:bubbles/game/interest_bubble.dart';
 import 'package:bubbles/game/walls.dart';
-import 'package:bubbles/models.dart/interest.dart';
-import 'package:bubbles/models.dart/picked_interest.dart';
+import 'package:bubbles/models/interest.dart';
+import 'package:bubbles/models/picked_interest.dart';
 
 class InterestBubbles extends Forge2DGame {
   final Function() updateCallback;

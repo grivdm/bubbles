@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bubbles/game/interest_bubble_content.dart';
+import 'package:bubbles/models/interest.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +10,19 @@ import 'bubble.dart';
 import 'package:bubbles/enums.dart';
 
 class InterestBubble extends Bubble with ContactCallbacks, TapCallbacks {
+  InterestBubble(this.position, this.interest,
+      {this.bubbleStatus = InterestStatus.none, required this.updateCallback})
+      : super(position: position, bodyType: BodyType.dynamic) {
+    selectedFillColor = Paint()..color = interest.color.withOpacity(0.1);
+    interestBubbleContent = InterestBubbleContent(interest: interest);
+  }
   final Function() updateCallback;
   InterestStatus bubbleStatus;
   final Vector2 position;
-  static Paint defaultFillColor = Paint()
-    ..color = const Color.fromARGB(255, 255, 255, 255);
-  static Paint selectedFillColor = Paint()..color = const Color(0x66E8DED1);
+  final Interest interest;
+
+  static Paint defaultFillColor = Paint()..color = const Color(0xFFFFFFFF);
+  late Paint selectedFillColor;
   @override
   Paint get borderColor => Paint()
     ..color = const Color(0x66A1A1A1)
@@ -26,21 +34,11 @@ class InterestBubble extends Bubble with ContactCallbacks, TapCallbacks {
   double get currentRadius => _defaultRadius;
   static const double _scaleFactorPressedOnce = 1.1;
   static const double _scaleFactorPressedTwice = 1.6;
-  final String text;
-  final String emoji;
+
   late InterestBubbleContent interestBubbleContent;
   double _lastTapTime = 0.0;
   static const double _doubleTapThreshold = 0.3;
   Paint _currentColor = defaultFillColor;
-
-  InterestBubble(this.position, this.text, this.emoji,
-      {this.bubbleStatus = InterestStatus.none, required this.updateCallback})
-      : super(position: position, bodyType: BodyType.dynamic) {
-    interestBubbleContent = InterestBubbleContent(
-      text: text,
-      emoji: emoji,
-    );
-  }
 
   void _updateBubbleStatus(InterestStatus newStatus) {
     bubbleStatus == newStatus

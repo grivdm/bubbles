@@ -1,23 +1,22 @@
 import 'package:bubbles/enums.dart';
+import 'package:bubbles/models/interest.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class InterestBubbleContent extends PositionComponent {
-  final String text;
-  final String emoji;
-  static const Color defaultTextColor = Color(0xff000000);
-  static const Color selectedTextColor = Color(0xFFA34022);
-  static const Color passiveTextColor = Color(0x66A1A1A1);
+  final Interest interest;
+  Color defaultTextColor = Color(0xff000000);
+  Color selectedTextColor;
+  Color passiveTextColor = Color(0x66A1A1A1);
 
   late final TextComponent emojiComponent;
   late final TextComponent textComponent;
 
   InterestBubbleContent({
-    required this.text,
-    required this.emoji,
-  }) {
+    required this.interest,
+  }) : selectedTextColor = interest.color {
     emojiComponent = TextComponent(
-      text: emoji,
+      text: interest.emoji,
       textRenderer: TextPaint(
         style: const TextStyle(
           fontFamily: 'Inter',
@@ -29,9 +28,9 @@ class InterestBubbleContent extends PositionComponent {
     );
 
     textComponent = TextComponent(
-      text: text,
+      text: interest.label,
       textRenderer: TextPaint(
-        style: const TextStyle(
+        style: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Inter',
             fontSize: 12,

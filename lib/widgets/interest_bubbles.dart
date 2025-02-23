@@ -15,7 +15,7 @@ class InterestBubbles extends Forge2DGame {
   @override
   Color backgroundColor() => Colors.white;
   InterestBubbles(this.interestList, this.pickedInterests, this.updateCallback)
-      : super(gravity: Vector2(0, 10));
+      : super(gravity: Vector2(0, 40));
 
   @override
   Future<void>? onLoad() {
@@ -24,9 +24,9 @@ class InterestBubbles extends Forge2DGame {
       add(element);
     }
 
-    const int numColumns = 8;
+    const int numColumns = 10;
     const double spacingX = 105.0;
-    const double spacingY = 105.0;
+    const double spacingY = 90.0;
 
     final int numRows = (interestList.length / numColumns).ceil();
 
@@ -49,40 +49,44 @@ class InterestBubbles extends Forge2DGame {
       int row = i ~/ numColumns;
       int column = i % numColumns;
 
-      double x = offsetX + column * spacingX;
+      double x =
+          offsetX + column * spacingX + (row % 2 == 1 ? spacingX / 2 : 0);
       double y = offsetY + row * spacingY;
 
       final bubble = InterestBubble(
-          Vector2(x, y), interestList[i].label, interestList[i].emoji,
-          bubbleStatus: bubbleStatus, updateCallback: updateCallback);
+        Vector2(x, y),
+        interestList[i],
+        bubbleStatus: bubbleStatus,
+        updateCallback: updateCallback,
+      );
       add(bubble);
     }
 
     return null;
   }
-}
 
-List<Wall> createBoundaries(Forge2DGame game) {
-  final screenSize = game.size;
-  final topLeft = Vector2.zero();
-  final bottomRight = Vector2(screenSize.x, screenSize.y);
-  final topRight = Vector2(bottomRight.x, topLeft.y);
-  final bottomLeft = Vector2(topLeft.x, bottomRight.y);
+  List<Wall> createBoundaries(Forge2DGame game) {
+    final screenSize = game.size;
+    final topLeft = Vector2.zero();
+    final bottomRight = Vector2(screenSize.x, screenSize.y);
+    final topRight = Vector2(bottomRight.x, topLeft.y);
+    final bottomLeft = Vector2(topLeft.x, bottomRight.y);
 
-  return [
-    Wall(topLeft, topRight),
-    Wall(topRight, bottomRight),
-    Wall(bottomRight, bottomLeft),
-    Wall(bottomLeft, topLeft),
-  ];
-}
+    return [
+      Wall(topLeft, topRight),
+      Wall(topRight, bottomRight),
+      Wall(bottomRight, bottomLeft),
+      Wall(bottomLeft, topLeft),
+    ];
+  }
 
-Future<List<Interest>> parseJson(json) async {
-  final List<dynamic> interestsList = json as List<dynamic>;
+  Future<List<Interest>> parseJson(json) async {
+    final List<dynamic> interestsList = json as List<dynamic>;
 
-  List<Interest> interests = interestsList.map((interest) {
-    return Interest.fromJson(interest as Map<String, dynamic>);
-  }).toList();
+    List<Interest> interests = interestsList.map((interest) {
+      return Interest.fromJson(interest as Map<String, dynamic>);
+    }).toList();
 
-  return interests;
+    return interests;
+  }
 }

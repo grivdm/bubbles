@@ -9,12 +9,12 @@ import 'package:bubbles/models/picked_interest.dart';
 
 class InterestBubbles extends Forge2DGame {
   final Function() updateCallback;
-  final dynamic interests;
+  final List<Interest> interestList;
   final List<PickedInterest> pickedInterests;
 
   @override
   Color backgroundColor() => Colors.white;
-  InterestBubbles(this.interests, this.pickedInterests, this.updateCallback)
+  InterestBubbles(this.interestList, this.pickedInterests, this.updateCallback)
       : super(gravity: Vector2(0, 10));
 
   @override
@@ -24,41 +24,40 @@ class InterestBubbles extends Forge2DGame {
       add(element);
     }
 
-    parseJson(interests).then((interestList) {
-      const int numColumns = 8;
-      const double spacingX = 105.0;
-      const double spacingY = 105.0;
+    const int numColumns = 8;
+    const double spacingX = 105.0;
+    const double spacingY = 105.0;
 
-      final int numRows = (interestList.length / numColumns).ceil();
+    final int numRows = (interestList.length / numColumns).ceil();
 
-      final double offsetX = (size.x - (numColumns - 1) * spacingX) / 2;
-      final double offsetY = (size.y - (numRows - 1) * spacingY) / 2;
+    final double offsetX = (size.x - (numColumns - 1) * spacingX) / 2;
+    final double offsetY = (size.y - (numRows - 1) * spacingY) / 2;
 
-      for (var i = 0; i < interestList.length; i++) {
-        String? pickedInterestStatus = pickedInterests
-            .where((e) => e.label == interestList[i].name)
-            .firstOrNull
-            ?.status;
+    for (var i = 0; i < interestList.length; i++) {
+      String? pickedInterestStatus = pickedInterests
+          .where((e) => e.label == interestList[i].label)
+          .firstOrNull
+          ?.status;
 
-        InterestStatus bubbleStatus = {
-              'like': InterestStatus.like,
-              'love': InterestStatus.love,
-              'dislike': InterestStatus.dislike,
-            }[pickedInterestStatus] ??
-            InterestStatus.none;
+      InterestStatus bubbleStatus = {
+            'like': InterestStatus.like,
+            'love': InterestStatus.love,
+            'dislike': InterestStatus.dislike,
+          }[pickedInterestStatus] ??
+          InterestStatus.none;
 
-        int row = i ~/ numColumns;
-        int column = i % numColumns;
+      int row = i ~/ numColumns;
+      int column = i % numColumns;
 
-        double x = offsetX + column * spacingX;
-        double y = offsetY + row * spacingY;
+      double x = offsetX + column * spacingX;
+      double y = offsetY + row * spacingY;
 
-        final bubble = InterestBubble(
-            Vector2(x, y), interestList[i].name, interestList[i].icon,
-            bubbleStatus: bubbleStatus, updateCallback: updateCallback);
-        add(bubble);
-      }
-    });
+      final bubble = InterestBubble(
+          Vector2(x, y), interestList[i].label, interestList[i].emoji,
+          bubbleStatus: bubbleStatus, updateCallback: updateCallback);
+      add(bubble);
+    }
+
     return null;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bubbles/models/interest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flame/game.dart';
@@ -17,8 +18,12 @@ class PickInterests extends StatefulWidget {
 
 class _PickInterestsState extends State<PickInterests> {
   late InterestBubbles game;
-  List<dynamic>? interestsJson;
+  List<Interest>? interestsList;
   final List<PickedInterest> pickedInterests = [];
+
+  final ScrollController _scrollController = ScrollController(
+    initialScrollOffset: 350,
+  );
 
   @override
   void initState() {
@@ -26,15 +31,20 @@ class _PickInterestsState extends State<PickInterests> {
     loadGameData();
   }
 
-  // Асинхронная загрузка данных
   Future<void> loadGameData() async {
-    List<dynamic> jsonData = await loadJsonAsset();
-    setState(() {
-      interestsJson = jsonData;
-      game = InterestBubbles(interestsJson!, pickedInterests, () {
-        setState(() {});
-      });
-    });
+    try {
+      final List<Interest> jsonData = await getInterestsFromAssets();
+      if (mounted) {
+        setState(() {
+          interestsList = jsonData;
+          game = InterestBubbles(interestsList!, pickedInterests, () {
+            if (mounted) setState(() {});
+          });
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading game data: $e');
+    }
   }
 
   @override
@@ -47,9 +57,7 @@ class _PickInterestsState extends State<PickInterests> {
         color: Colors.white,
         alignment: Alignment.center,
         child: SingleChildScrollView(
-          controller: ScrollController(
-            initialScrollOffset: 350,
-          ),
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +66,7 @@ class _PickInterestsState extends State<PickInterests> {
                 width: 1000,
                 color: Colors.green,
                 alignment: Alignment.center,
-                child: interestsJson == null
+                child: interestsList == null
                     ? const CircularProgressIndicator()
                     : GameWidget(
                         game: game,
@@ -72,8 +80,8 @@ class _PickInterestsState extends State<PickInterests> {
   }
 }
 
-Future<List<dynamic>> loadJsonAsset() async {
+Future<List<Interest>> getInterestsFromAssets() async {
   String jsonString = await rootBundle.loadString('assets/interests.json');
-  List<dynamic> jsonData = json.decode(jsonString);
-  return jsonData;
+  List<dynamic> jsonData = jsonDecode(jsonString);
+  return jsonData.map((e) => Interest.fromJson(e)).toList();
 }

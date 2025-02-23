@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class InterestBubbleContent extends PositionComponent {
   final Interest interest;
-  Color defaultTextColor = Color(0xff000000);
+  static const Color defaultTextColor = Color(0xff000000);
   Color selectedTextColor;
-  Color passiveTextColor = Color(0x66A1A1A1);
+  static const Color passiveTextColor = Color(0x66A1A1A1);
 
   late final TextComponent emojiComponent;
   late final TextComponent textComponent;
@@ -19,7 +19,7 @@ class InterestBubbleContent extends PositionComponent {
       text: interest.emoji,
       textRenderer: TextPaint(
         style: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'Noto Color Emoji',
           fontSize: 24,
         ),
       ),
@@ -30,7 +30,7 @@ class InterestBubbleContent extends PositionComponent {
     textComponent = TextComponent(
       text: interest.label,
       textRenderer: TextPaint(
-        style: TextStyle(
+        style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Inter',
             fontSize: 12,
@@ -95,9 +95,4 @@ class InterestBubbleContent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {}
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
 }

@@ -1,3 +1,4 @@
+import 'package:bubbles/theme/app_colors.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class InterestBubbles extends Forge2DGame {
   final List<PickedInterest> pickedInterests;
 
   @override
-  Color backgroundColor() => Colors.white;
+  Color backgroundColor() => AppColors.bubbleDefaultFill;
   InterestBubbles(this.interestList, this.pickedInterests, this.updateCallback)
       : super(gravity: Vector2(0, 40));
 

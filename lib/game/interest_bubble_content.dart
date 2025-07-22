@@ -1,13 +1,14 @@
 import 'package:bubbles/enums.dart';
 import 'package:bubbles/models/interest.dart';
+import 'package:bubbles/theme/app_colors.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class InterestBubbleContent extends PositionComponent {
   final Interest interest;
-  static const Color defaultTextColor = Color(0xff000000);
+  static const Color defaultTextColor = AppColors.textDefault;
   Color selectedTextColor;
-  static const Color passiveTextColor = Color(0x66A1A1A1);
+  static const Color passiveTextColor = AppColors.textPassive;
 
   late final TextComponent emojiComponent;
   late final TextComponent textComponent;
@@ -20,7 +21,7 @@ class InterestBubbleContent extends PositionComponent {
       textRenderer: TextPaint(
         style: const TextStyle(
           fontFamily: 'Noto Color Emoji',
-          fontSize: 24,
+          fontSize: 28,
         ),
       ),
       anchor: Anchor.center,

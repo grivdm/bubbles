@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:bubbles/models/interest.dart';
+import 'package:bubbles/theme/app_colors.dart';
+import 'package:bubbles/utils/get_interests_from_assests.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flame/game.dart';
-import 'package:flutter/services.dart';
 
 import 'package:bubbles/models/picked_interest.dart';
 import 'package:bubbles/widgets/interest_bubbles.dart';
@@ -33,10 +31,10 @@ class _PickInterestsState extends State<PickInterests> {
 
   Future<void> loadGameData() async {
     try {
-      final List<Interest> jsonData = await getInterestsFromAssets();
+      final List<Interest> _interestsList = await getInterestsFromAssets();
       if (mounted) {
         setState(() {
-          interestsList = jsonData;
+          interestsList = _interestsList;
           game = InterestBubbles(interestsList!, pickedInterests, () {
             if (mounted) setState(() {});
           });
@@ -54,7 +52,6 @@ class _PickInterestsState extends State<PickInterests> {
         title: const Text('Pick your interests'),
       ),
       body: Container(
-        color: Colors.white,
         alignment: Alignment.center,
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -63,8 +60,7 @@ class _PickInterestsState extends State<PickInterests> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 1000,
-                color: Colors.green,
+                width: 1500,
                 alignment: Alignment.center,
                 child: interestsList == null
                     ? const CircularProgressIndicator()
@@ -78,10 +74,4 @@ class _PickInterestsState extends State<PickInterests> {
       ),
     );
   }
-}
-
-Future<List<Interest>> getInterestsFromAssets() async {
-  String jsonString = await rootBundle.loadString('assets/interests.json');
-  List<dynamic> jsonData = jsonDecode(jsonString);
-  return jsonData.map((e) => Interest.fromJson(e)).toList();
 }

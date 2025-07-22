@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bubbles/game/interest_bubble_content.dart';
 import 'package:bubbles/models/interest.dart';
+import 'package:bubbles/theme/app_colors.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/services.dart';
@@ -21,11 +22,11 @@ class InterestBubble extends Bubble with ContactCallbacks, TapCallbacks {
   final Vector2 position;
   final Interest interest;
 
-  static Paint defaultFillColor = Paint()..color = const Color(0xFFFFFFFF);
+  static Paint defaultFillColor = Paint()..color = AppColors.bubbleDefaultFill;
   late Paint selectedFillColor;
   @override
   Paint get borderColor => Paint()
-    ..color = const Color(0x66A1A1A1)
+    ..color = AppColors.bubbleBorder
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1.0;
   @override
@@ -47,17 +48,6 @@ class InterestBubble extends Bubble with ContactCallbacks, TapCallbacks {
     // _pickedInterestListUpdate(text, bubbleStatus);
     updateCallback();
   }
-
-  // void _pickedInterestListUpdate(String label, InterestStatus status) {
-  //   FFAppState()
-  //       .pickedInterestsState
-  //       .removeWhere((element) => element.label == label);
-  //   if (status != InterestStatus.none) {
-  //     FFAppState()
-  //         .pickedInterestsState
-  //         .add(PickedInterestStruct(label: label, status: status.name));
-  //   }
-  // }
 
   @override
   Future<void> onLoad() async {
@@ -133,7 +123,6 @@ class InterestBubble extends Bubble with ContactCallbacks, TapCallbacks {
         setRadius(_defaultRadius);
         _currentColor = defaultFillColor;
         break;
-      default:
     }
   }
 }
